@@ -201,17 +201,17 @@ function palette(t) {
 /* ---------- world state ---------- */
 let W = 0, H = 0, U = 1, HOR = 0, DPR = 1;
 let T = 0.4, time = 0, paused = false, target = null;
-const CYCLE = reduce ? 420 : 160;
+const CYCLE = reduce ? 480 : 260;
 const gy = g => HOR + g * (H - HOR);
 const ds = g => 0.3 + g * 1.0;
 
-const stars = Array.from({ length: 120 }, () => ({ x: R(), y: R() * 0.9, ph: R() * TAU, sp: 0.5 + R() * 2, glyph: R() < 0.3, s: 0.6 + R() * 0.9 }));
-const clouds = Array.from({ length: 5 }, (_, i) => ({
-  x: i / 5 + R() * 0.1, y: 0.1 + R() * 0.3, spd: 0.004 + R() * 0.004,
-  parts: Array.from({ length: 5 + (R() * 5 | 0) }, () => ({ dx: (R() - 0.5) * 170, dy: (R() - 0.5) * 24, s: 26 + R() * 34 })),
+const stars = Array.from({ length: 70 }, () => ({ x: R(), y: R() * 0.9, ph: R() * TAU, sp: 0.5 + R() * 2, glyph: R() < 0.3, s: 0.6 + R() * 0.9 }));
+const clouds = Array.from({ length: 3 }, (_, i) => ({
+  x: i / 3 + R() * 0.1, y: 0.1 + R() * 0.3, spd: 0.004 + R() * 0.004,
+  parts: Array.from({ length: 3 + (R() * 3 | 0) }, () => ({ dx: (R() - 0.5) * 140, dy: (R() - 0.5) * 20, s: 26 + R() * 30 })),
 }));
-const hillsFar = Array.from({ length: 16 }, (_, i) => ({ x: i / 15 + (R() - 0.5) * 0.04, s: 50 + R() * 60 }));
-const hillsNear = Array.from({ length: 11 }, (_, i) => ({ x: i / 10 + (R() - 0.5) * 0.06, s: 60 + R() * 70 }));
+const hillsFar = Array.from({ length: 9 }, (_, i) => ({ x: i / 8 + (R() - 0.5) * 0.04, s: 50 + R() * 60 }));
+const hillsNear = Array.from({ length: 6 }, (_, i) => ({ x: i / 5 + (R() - 0.5) * 0.06, s: 60 + R() * 70 }));
 
 function makeTree(x, g, s) {
   const leaves = Array.from({ length: 30 }, () => {
@@ -227,24 +227,24 @@ const add = (o) => { animals.push(Object.assign({ type: 'animal', phase: R() * T
 [[0.02, 0.5, 105], [0.1, 0.55, 118], [0.065, 0.53, 58]].forEach(([x, g, size]) => add({ kind: 'elephant', ch: '象', x, g, size, speed: 0.006, gait: 2.2, col: [110, 104, 98] }));
 add({ kind: 'giraffe', x: 0.335, g: 0.36, size: 72, speed: 0, gait: 0.8, browse: true });
 add({ kind: 'giraffe', x: 0.74, g: 0.42, size: 66, speed: 0.004, dir: 1, gait: 1.6 });
-for (let i = 0; i < 7; i++) add({ kind: 'zebra', ch: '马', x: 0.48 + i * 0.034 + R() * 0.01, g: 0.6 + R() * 0.12, size: 58 + R() * 8, speed: 0.011, dir: -1, gait: 4 });
-for (let i = 0; i < 5; i++) add({ kind: 'gazelle', ch: '羚', x: 0.82 + i * 0.025, g: 0.44 + R() * 0.07, size: 34, speed: 0.016, dir: 1, gait: 6, col: [176, 122, 64] });
-add({ kind: 'lion', ch: '狮', x: 0.16, g: 0.8, size: 92, speed: 0, gait: 1.1, col: [198, 146, 72], roarAt: 14 });
+for (let i = 0; i < 4; i++) add({ kind: 'zebra', ch: '马', x: 0.5 + i * 0.045 + R() * 0.01, g: 0.6 + R() * 0.12, size: 58 + R() * 8, speed: 0.011, dir: -1, gait: 4 });
+for (let i = 0; i < 3; i++) add({ kind: 'gazelle', ch: '羚', x: 0.82 + i * 0.035, g: 0.44 + R() * 0.07, size: 34, speed: 0.016, dir: 1, gait: 6, col: [176, 122, 64] });
+add({ kind: 'lion', ch: '狮', x: 0.16, g: 0.8, size: 92, speed: 0, gait: 1.1, col: [198, 146, 72], roarAt: 45 });
 add({ kind: 'rhino', ch: '犀', x: 0.72, g: 0.88, size: 96, speed: 0.0028, dir: -1, gait: 1.6, col: [112, 104, 96] });
 const water = { type: 'water', x: 0.62, g: 0.24 };
-const flowers = [[.22, .93], [.5, .98], [.8, .9], [.64, .86], [.08, .95]].map(([x, g]) => ({ type: 'flower', x, g, fold: {} }));
+const flowers = [[.24, .93], [.62, .9], [.86, .96]].map(([x, g]) => ({ type: 'flower', x, g, fold: {} }));
 const hippo = { x: 0.6, ph: 0 };
 
-const vultures = Array.from({ length: 3 }, (_, i) => ({ cx: 0.45 + i * 0.12, cy: 0.18 + i * 0.05, r: 40 + R() * 40, a: R() * TAU, sp: 0.25 + R() * 0.15 }));
+const vultures = Array.from({ length: 2 }, (_, i) => ({ cx: 0.5 + i * 0.14, cy: 0.18 + i * 0.05, r: 40 + R() * 40, a: R() * TAU, sp: 0.25 + R() * 0.15 }));
 let flocks = [];
 const dust = [];
 const roars = [];
-const fireflies = Array.from({ length: 28 }, () => ({ x: R(), g: 0.3 + R() * 0.7, ph: R() * TAU, vx: (R() - 0.5) * 0.01, bob: R() * TAU }));
+const fireflies = Array.from({ length: 14 }, () => ({ x: R(), g: 0.3 + R() * 0.7, ph: R() * TAU, vx: (R() - 0.5) * 0.01, bob: R() * TAU }));
 
 const grass = [];
 function buildGrass() {
   grass.length = 0;
-  const n = clamp(Math.round(W * 0.42), 260, 720);
+  const n = clamp(Math.round(W * 0.24), 150, 400);
   for (let i = 0; i < n; i++) {
     const g = 0.02 + Math.pow(R(), 0.55) * 1.1;
     grass.push({ x: R() * 1.04 - 0.02, g, s: 20 + R() * 20, ph: R() * TAU, shade: 0.82 + R() * 0.3 });
@@ -334,12 +334,12 @@ function roar(lion) {
     roars.push({ ch: '吼', x, y, vx: Math.cos(a) * 140 * U, vy: Math.sin(a) * 110 * U, life: 2.4, max: 2.4, s: 26 * U, grow: 30 * U });
   }
   lion.roaring = 1.2;
-  lion.roarAt = time + 32 + R() * 20;
+  lion.roarAt = time + 70 + R() * 40;
   animals.forEach(a => { if (a.kind === 'gazelle' || a.kind === 'zebra') { a.spook = 4; a.dir = a.x * W > x ? 1 : -1; } });
   spawnFlock(x + 60 * U, HOR - 40 * U, true);
 }
 function spawnFlock(x, y, scatter) {
-  const n = scatter ? 9 : 5 + (R() * 5 | 0);
+  const n = scatter ? 7 : 3 + (R() * 3 | 0);
   const dir = scatter ? (x < W / 2 ? 1 : -1) : (R() < 0.5 ? 1 : -1);
   const members = Array.from({ length: n }, (_, i) => {
     const row = Math.ceil(i / 2), side = i % 2 ? 1 : -1;
@@ -349,7 +349,7 @@ function spawnFlock(x, y, scatter) {
   });
   flocks.push({ x: scatter ? x : (dir > 0 ? -60 : W + 60), y: scatter ? y : HOR * (0.15 + R() * 0.35), vx: dir * (55 + R() * 25), vy: (R() - 0.5) * 6, scatter, members, age: 0 });
 }
-let nextFlock = 3;
+let nextFlock = 8;
 
 /* ---------- card ---------- */
 const card = document.getElementById('card');
@@ -416,10 +416,14 @@ function foldU(m) {
   if (t < up + hold + down) return 1 - (t - up - hold) / down;
   return 0;
 }
+let lastFold = -99;
 function foldTick(m, lo, hi) {
   if (reduce) return;
-  if (m.next == null) m.next = time + 3 + R() * (hi - lo);
-  if (time > m.next && foldU(m) === 0) { m.t0 = time; m.next = time + lo + R() * (hi - lo); }
+  if (m.next == null) m.next = time + 4 + R() * (hi - lo) * 1.5;
+  if (time > m.next && foldU(m) === 0) {
+    if (time - lastFold < 11) { m.next = time + 3 + R() * 6; return; }
+    m.t0 = time; lastFold = time; m.next = time + lo * 1.6 + R() * (hi - lo) * 1.6;
+  }
 }
 function fold(m) { if (m && foldU(m) === 0) m.t0 = time; }
 function drawFold(ch, x, y, size, u, cols, o = {}) {
@@ -588,14 +592,14 @@ function makeCoral(x, s, ci) {
   return { x, s, col: CORAL_COLS[ci % CORAL_COLS.length], segs };
 }
 const reef = {
-  corals: [[.08, 1.1, 0], [.3, .85, 1], [.47, 1.2, 2], [.6, .7, 3], [.83, 1.05, 4], [.95, .75, 0], [.39, .6, 3], [.72, .55, 1]].map(([x, s, c]) => makeCoral(x, s, c)),
-  kelpBack: Array.from({ length: 7 }, (_, i) => ({ x: .05 + i * .15 + R() * .05, n: 9 + (R() * 6 | 0), s: 22, ph: R() * TAU })),
+  corals: [[.1, 1.05, 0], [.33, .85, 1], [.5, 1.15, 2], [.84, 1, 4], [.66, .6, 3]].map(([x, s, c]) => makeCoral(x, s, c)),
+  kelpBack: Array.from({ length: 4 }, (_, i) => ({ x: .1 + i * .26 + R() * .05, n: 9 + (R() * 6 | 0), s: 22, ph: R() * TAU })),
   kelpFront: [{ x: .025, n: 15, s: 46, ph: 0 }, { x: .975, n: 13, s: 42, ph: 2 }],
   schools: [
-    { ch: '鲹', id: 'jack', col: [200, 214, 228], alt: [150, 186, 214], size: 20, y: .3, a: .11, b: .23, ph: 0, n: 20 },
-    { ch: '鱼', id: 'fish', col: [255, 190, 70], alt: [90, 190, 250], size: 14, y: .58, a: .08, b: .31, ph: 2, n: 26, mixed: true },
-    { ch: '鲭', id: 'mackerel', col: [70, 160, 150], alt: [170, 214, 204], size: 18, y: .42, a: .14, b: .19, ph: 4, n: 16 },
-    { ch: '鲷', id: 'bream', col: [238, 118, 110], alt: [250, 170, 150], size: 22, y: .66, a: .06, b: .27, ph: 5, n: 9 },
+    { ch: '鲹', id: 'jack', col: [200, 214, 228], alt: [150, 186, 214], size: 20, y: .3, a: .07, b: .15, ph: 0, n: 9 },
+    { ch: '鱼', id: 'fish', col: [255, 190, 70], alt: [90, 190, 250], size: 14, y: .58, a: .05, b: .2, ph: 2, n: 12, mixed: true },
+    { ch: '鲭', id: 'mackerel', col: [70, 160, 150], alt: [170, 214, 204], size: 18, y: .42, a: .09, b: .13, ph: 4, n: 8 },
+    { ch: '鲷', id: 'bream', col: [238, 118, 110], alt: [250, 170, 150], size: 22, y: .66, a: .04, b: .18, ph: 5, n: 5 },
   ].map(s => Object.assign(s, { fish: Array.from({ length: s.n }, () => {
     const a = R() * TAU, r = Math.sqrt(R());
     const reefCols = [[255, 190, 70], [90, 190, 250], [250, 120, 170], [150, 230, 120], [255, 140, 60], [190, 150, 255]];
@@ -610,20 +614,20 @@ const reef = {
   shark: { x: .15, y: .3, dir: 1 },
   turtle: { x: .68, y: .22, dir: -1 },
   whale: { x: .72, y: .3 },
-  jellies: Array.from({ length: 5 }, (_, i) => ({ x: .12 + i * .19 + R() * .05, y: .15 + R() * .45, ph: R() * TAU, col: [[240, 150, 220], [180, 160, 255], [255, 190, 210]][i % 3] })),
+  jellies: Array.from({ length: 3 }, (_, i) => ({ x: .2 + i * .3 + R() * .05, y: .15 + R() * .45, ph: R() * TAU, col: [[240, 150, 220], [180, 160, 255], [255, 190, 210]][i % 3] })),
   seahorses: [{ x: .53, y: .6, ph: 0 }, { x: .57, y: .55, ph: 1.4 }],
   anemone: { x: .72 },
   clowns: [{ ph: 0 }, { ph: PI }], clownHide: -99,
   octo: { x: .2, jetAt: -99, camo: 0 },
   crab: { c: .42 },
-  shrimp: Array.from({ length: 3 }, (_, i) => ({ x: .5 + i * .035, v: .12 + R() * .05, ph: R() * TAU, dartAt: -99, next: 3 + R() * 4 })),
+  shrimp: Array.from({ length: 2 }, (_, i) => ({ x: .5 + i * .035, v: .12 + R() * .05, ph: R() * TAU, dartAt: -99, next: 3 + R() * 4 })),
   stars: [[.27, .25, 36], [.63, .55, 42], [.9, .35, 30]],
   shells: [[.14, .35, 24], [.5, .7, 20], [.78, .8, 26], [.36, .6, 22]],
-  sandBits: Array.from({ length: 70 }, () => ({ x: R(), v: R(), s: 10 + R() * 8 })),
+  sandBits: Array.from({ length: 30 }, () => ({ x: R(), v: R(), s: 10 + R() * 8 })),
   rocksBack: [[.12, 90], [.55, 70], [.9, 100]],
-  distant: Array.from({ length: 14 }, (_, i) => ({ x: i / 13 + (R() - .5) * .03, s: 70 + R() * 70, ch: R() < .5 ? '珊' : '瑚', ph: R() * TAU })),
-  rays: Array.from({ length: 7 }, (_, i) => ({ x: .04 + i * .16 + R() * .05, w: .03 + R() * .05, ph: R() * TAU })),
-  plankton: Array.from({ length: 80 }, () => ({ x: R(), y: R(), ph: R() * TAU, s: .6 + R() })),
+  distant: Array.from({ length: 8 }, (_, i) => ({ x: i / 7 + (R() - .5) * .03, s: 70 + R() * 70, ch: R() < .5 ? '珊' : '瑚', ph: R() * TAU })),
+  rays: Array.from({ length: 4 }, (_, i) => ({ x: .08 + i * .26 + R() * .05, w: .03 + R() * .05, ph: R() * TAU })),
+  plankton: Array.from({ length: 40 }, () => ({ x: R(), y: R(), ph: R() * TAU, s: .6 + R() })),
   bubbles: [], ink: [], nextBub: 0,
 };
 const cc = document.createElement('canvas'); cc.width = 30; cc.height = 30;
@@ -695,7 +699,7 @@ function drawReef(dt, day, night) {
   through(0, '日', P.ray, [255, 244, 210], 'sun');
   through(.5, '月', [170, 190, 255], [236, 240, 255], 'moon');
   ctx.fillStyle = rgba(mix(P.top, WHITE, .55), .5);
-  const sp = 64 * U;
+  const sp = 110 * U;
   for (let row = 0; row < 2; row++) {
     const off = ((time * (row ? -18 : 24) * U) % sp + sp) % sp;
     for (let x = -sp + off; x < W + sp; x += sp) {
@@ -709,7 +713,7 @@ function drawReef(dt, day, night) {
   const wh = reef.whale;
   wh.x -= .011 * dt; if (wh.x < -.5) { wh.x = 1.5; wh.y = .22 + R() * .16; }
   const why = SURF + (FLOOR - SURF) * wh.y;
-  wriggle('鲸', rgba(mix(P.deep, P.mid, .3)), wh.x * W, why, 320 * U, 6 * U, .02, time * .8, .3, true);
+  wriggle('鲸', rgba(mix(P.deep, P.mid, .3)), wh.x * W, why, 320 * U, 6 * U, .02, time * .8, .17, true);
   hit('whale', wh.x * W, why, 130 * U, 1.3);
 
   /* light rays */
@@ -823,7 +827,7 @@ function drawReef(dt, day, night) {
 
   /* shark */
   const sh = reef.shark;
-  sh.x += sh.dir * .04 * dt;
+  sh.x += sh.dir * .028 * dt;
   if (sh.x > 1.25) { sh.dir = -1; sh.y = .22 + R() * .3; } else if (sh.x < -.25) { sh.dir = 1; sh.y = .22 + R() * .3; }
   const shx = sh.x * W, shy = SURF + (FLOOR - SURF) * sh.y + Math.sin(time * .7) * 12 * U;
   wriggle('鲨', rgba(tint([92, 108, 124])), shx, shy, 130 * U, 4 * U, .04, time * 3 * sh.dir, 1, true);
@@ -863,7 +867,7 @@ function drawReef(dt, day, night) {
   hit('lionfish', lfx, lfy, 24 * U, .8);
   const tn = so.tuna;
   if (tn.x > -.25 && tn.x < 1.25) tn.x += tn.dir * .14 * dt;
-  else if ((tn.next -= dt) < 0) { tn.dir = R() < .5 ? 1 : -1; tn.x = tn.dir > 0 ? -.2 : 1.2; tn.y = .18 + R() * .3; tn.next = 10 + R() * 10; }
+  else if ((tn.next -= dt) < 0) { tn.dir = R() < .5 ? 1 : -1; tn.x = tn.dir > 0 ? -.2 : 1.2; tn.y = .18 + R() * .3; tn.next = 30 + R() * 25; }
   if (tn.x > -.25 && tn.x < 1.25) {
     const tx2 = tn.x * W, ty2 = SURF + (FLOOR - SURF) * tn.y + Math.sin(time * 3) * 3 * U;
     const tg2 = ctx.createLinearGradient(0, -50, 0, 50); tg2.addColorStop(0, rgba(tint([30, 50, 110]))); tg2.addColorStop(.55, rgba(tint([150, 170, 200]))); tg2.addColorStop(1, rgba(tint([230, 236, 244])));
@@ -925,7 +929,7 @@ function drawReef(dt, day, night) {
   /* bubbles */
   reef.nextBub -= dt;
   if (reef.nextBub < 0) {
-    reef.nextBub = .25 + R() * .35;
+    reef.nextBub = 1 + R() * 1.4;
     const src = [[ax, ay - 20 * U], [orx + 30 * U, FLOOR - 40 * U], [(.1 + R() * .8) * W, FLOOR - 10 * U]][R() * 3 | 0];
     reef.bubbles.push({ x: src[0], y: src[1], r: (2 + R() * 4) * U, vy: -(40 + R() * 40) * U, ph: R() * TAU, g: R() < .15 });
   }
@@ -1053,34 +1057,34 @@ function makeStalk(x, layer) {
     pts: [] };
 }
 const bam = {
-  far: Array.from({ length: 12 }, (_, i) => makeStalk(i / 11 + (R() - .5) * .04, 0)),
-  mid: Array.from({ length: 11 }, (_, i) => makeStalk(.03 + i / 10 * .94 + (R() - .5) * .03, 1)),
-  near: [.03, .16, .47, .62, .87, .98].map(x => makeStalk(x + (R() - .5) * .015, 2)),
+  far: Array.from({ length: 7 }, (_, i) => makeStalk(i / 6 + (R() - .5) * .04, 0)),
+  mid: Array.from({ length: 6 }, (_, i) => makeStalk(.06 + i / 5 * .88 + (R() - .5) * .03, 1)),
+  near: [.03, .44, .66, .97].map(x => makeStalk(x + (R() - .5) * .015, 2)),
   mountains: [
     Array.from({ length: 5 }, (_, i) => ({ x: i / 4 + (R() - .5) * .08, s: 260 + R() * 120 })),
     Array.from({ length: 6 }, (_, i) => ({ x: i / 5 + .08 + (R() - .5) * .08, s: 190 + R() * 90 })),
     Array.from({ length: 8 }, (_, i) => ({ x: i / 7 + (R() - .5) * .06, s: 130 + R() * 60 })),
   ],
-  mistGlyphs: Array.from({ length: 6 }, (_, i) => ({ x: i / 6 + R() * .1, y: .35 + R() * .3, s: 160 + R() * 120, v: .004 + R() * .005 })),
+  mistGlyphs: Array.from({ length: 3 }, (_, i) => ({ x: i / 3 + R() * .1, y: .35 + R() * .3, s: 160 + R() * 120, v: .004 + R() * .005 })),
   shoots: [[.22, .9, 34], [.4, .95, 28], [.56, .86, 24], [.8, .93, 36], [.93, .88, 26]].map(([x, v, s]) => ({ x, v, s, ph: R() * TAU })),
-  floor: Array.from({ length: 50 }, () => ({ x: R(), v: R(), s: 12 + R() * 10, r: R() * TAU, ch: R() < .7 ? '叶' : '苔' })),
+  floor: Array.from({ length: 22 }, () => ({ x: R(), v: R(), s: 12 + R() * 10, r: R() * TAU, ch: R() < .7 ? '叶' : '苔' })),
   stones: [[.44, 36], [.52, 46], [.6, 30], [.86, 40]],
   panda: { x: .29, rollAt: -99, state: 'sit', until: 16, dir: 1 }, cub: { x: .36, rollAt: -99, next: 12 },
   walkers: [
-    ...[0, 1, 2].map(i => ({ ch: '牛', id: 'takin', x: .62 + i * .06, v: .08 + i * .03, dir: -1, speed: .014, size: 64 - i * 6, col: [214, 170, 84], gait: 2.4 })),
+    ...[0, 1].map(i => ({ ch: '牛', id: 'takin', x: .62 + i * .07, v: .08 + i * .04, dir: -1, speed: .014, size: 64 - i * 6, col: [214, 170, 84], gait: 2.4 })),
     { ch: '猪', id: 'boar', x: .12, v: .27, dir: 1, speed: .022, size: 50, col: [96, 76, 62], gait: 6 },
     { ch: '兔', id: 'hare', x: .5, v: .33, dir: 1, speed: .035, size: 28, col: [182, 156, 124], gait: 7, hop: true },
     { ch: '麂', id: 'muntjac', x: .86, v: .05, dir: -1, speed: .018, size: 44, col: [176, 112, 62], gait: 5 },
   ],
-  redpanda: { stalk: 3, u: .1, dir: 1 },
-  monkeys: Array.from({ length: 3 }, (_, i) => ({ cur: i * 3 + 1, next: i * 3 + 1, t0: -99, wait: 2 + R() * 4 })),
+  redpanda: { stalk: 2, u: .1, dir: 1 },
+  monkeys: Array.from({ length: 2 }, (_, i) => ({ cur: i * 4 + 1, next: i * 4 + 1, t0: -99, wait: 2 + R() * 4 })),
   crane: { x: .74, danceAt: 6 },
   frog: { stone: 1, hopAt: -99, croakAt: 3 },
   pheasant: { x: .12, dir: 1, pause: 0 },
-  viper: { stalk: 4, u: .38 },
+  viper: { stalk: 1, u: .42 },
   tiger: { x: .62, dir: -1 },
-  butterflies: Array.from({ length: 7 }, (_, i) => ({ x: R(), y: .55 + R() * .3, ph: R() * TAU, col: [[250, 200, 70], [240, 120, 150], [140, 190, 255], [255, 255, 240]][i % 4], vx: 0, vy: 0 })),
-  fireflies: Array.from({ length: 30 }, () => ({ x: R(), y: .45 + R() * .5, ph: R() * TAU, b: R() * TAU })),
+  butterflies: Array.from({ length: 4 }, (_, i) => ({ x: R(), y: .55 + R() * .3, ph: R() * TAU, col: [[250, 200, 70], [240, 120, 150], [140, 190, 255], [255, 255, 240]][i % 4], vx: 0, vy: 0 })),
+  fireflies: Array.from({ length: 15 }, () => ({ x: R(), y: .45 + R() * .5, ph: R() * TAU, b: R() * TAU })),
   leaves: [], parts: [],
   gust: { x: -1, on: false, next: 5, dir: 1 },
 };
@@ -1190,7 +1194,7 @@ function drawBamboo(dt, day, night) {
     for (let x = 0; x <= W + 16; x += 16) ctx.lineTo(x, ridge(x));
     ctx.lineTo(W, baseY + 4); ctx.closePath(); ctx.fill();
     ctx.fillStyle = rgba(mix(c, P.ink, .25), .75);
-    const step = (22 - li * 3) * U;
+    const step = (34 - li * 4) * U;
     for (let x = step / 2; x < W; x += step) { glyph('山', x, ridge(x) + step * .5, step * 1.05, 0, 1, .8); hit('peaks', x, ridge(x) + step * .1, step * .5, 1.4); }
     const mg = ctx.createLinearGradient(0, GROUND - H * (.3 - li * .05), 0, GROUND - H * (.1 - li * .05));
     mg.addColorStop(0, rgba(P.mist, 0)); mg.addColorStop(1, rgba(P.mist, .55));
@@ -1202,15 +1206,15 @@ function drawBamboo(dt, day, night) {
   if (!reduce) { g.next -= dt; if (!g.on && g.next < 0) { g.on = true; g.dir = R() < .5 ? 1 : -1; g.x = g.dir > 0 ? -200 : W + 200; } }
   if (g.on) {
     g.x += g.dir * W * .22 * dt;
-    if (g.x > W + 250 || g.x < -250) { g.on = false; g.next = 12 + R() * 10; }
-    if (R() < .3) bam.leaves.push(newLeaf(g.x + (R() - .5) * 200 * U, R() * H * .5));
+    if (g.x > W + 250 || g.x < -250) { g.on = false; g.next = 30 + R() * 20; }
+    if (R() < .08) bam.leaves.push(newLeaf(g.x + (R() - .5) * 200 * U, R() * H * .5));
   }
 
   /* far bamboo, then mist */
   for (const s of bam.far) drawStalk(s, P, lit, night);
   for (const m of bam.mistGlyphs) {
     m.x += m.v * dt; if (m.x > 1.3) m.x = -.3;
-    ctx.fillStyle = rgba(P.mist, .28 + .15 * (1 - day));
+    ctx.fillStyle = rgba(P.mist, .16 + .1 * (1 - day));
     glyph('雾', m.x * W, GROUND * m.y + Math.sin(time * .2 + m.s) * 10 * U, m.s * U, 0, 2.2, .7, true);
     hit('mist', m.x * W, GROUND * m.y, m.s * U * .5, 1.6);
   }
@@ -1238,7 +1242,7 @@ function drawBamboo(dt, day, night) {
   hit('tiger', tx, ty - tsz * .45, tsz * .55, .7);
 
   /* animals crossing the forest floor */
-  if (!bam.walkers.piglets) { const boar = bam.walkers.find(w => w.id === 'boar'); bam.walkers.push({ ch: '猪', id: 'boar', follow: boar, off: .035, v: .3, size: 26, col: [120, 96, 80], gait: 8 }, { ch: '猪', id: 'boar', follow: boar, off: .06, v: .29, size: 24, col: [120, 96, 80], gait: 8 }); bam.walkers.piglets = true; }
+  if (!bam.walkers.piglets) { const boar = bam.walkers.find(w => w.id === 'boar'); bam.walkers.push({ ch: '猪', id: 'boar', follow: boar, off: .04, v: .3, size: 26, col: [120, 96, 80], gait: 8 }); bam.walkers.piglets = true; }
   for (const w of bam.walkers.slice().sort((a, b) => a.v - b.v)) {
     if (w.follow) { w.x = w.follow.x - w.follow.dir * w.off; w.dir = w.follow.dir; w.pause = w.follow.pause; w.spook = w.follow.spook; }
     else {
@@ -1323,7 +1327,7 @@ function drawBamboo(dt, day, night) {
 
   /* frog on a stone */
   const fr = bam.frog, [fsx, fsy] = stonePos[fr.stone];
-  if (time > fr.croakAt) { fr.croakAt = time + 5 + R() * 5; bam.parts.push({ ch: '呱', x: fsx + 14 * U, y: fsy - 30 * U, vx: 8 * U, vy: -24 * U, life: 1.6, max: 1.6, s: 20 * U, grow: 8 * U, col: [240, 250, 220] }); }
+  if (time > fr.croakAt) { fr.croakAt = time + 10 + R() * 8; bam.parts.push({ ch: '呱', x: fsx + 14 * U, y: fsy - 30 * U, vx: 8 * U, vy: -24 * U, life: 1.6, max: 1.6, s: 20 * U, grow: 8 * U, col: [240, 250, 220] }); }
   const ht = time - fr.hopAt;
   let fxx = fsx, fyy = fsy, falpha = 1;
   if (ht >= 0 && ht < 2.6) {
@@ -1340,14 +1344,14 @@ function drawBamboo(dt, day, night) {
   fr.snapAt ??= time + 6;
   const flx = fsx + Math.cos(time * 2.6) * 55 * U + Math.sin(time * 7.3) * 10 * U, fly_y = fsy - 60 * U + Math.sin(time * 3.7) * 22 * U;
   if (time - fly.gone > 4) {
-    if (time > fr.snapAt && !(ht >= 0 && ht < 2.6)) { fr.tongue = time; fly.tx = flx; fly.ty = fly_y; fly.gone = time; fr.snapAt = time + 8 + R() * 6; }
+    if (time > fr.snapAt && !(ht >= 0 && ht < 2.6)) { fr.tongue = time; fly.tx = flx; fly.ty = fly_y; fly.gone = time; fr.snapAt = time + 16 + R() * 10; }
     else { ctx.fillStyle = rgba(tint([40, 40, 50])); glyph('蝇', flx, fly_y, 14 * U, Math.sin(time * 30) * .2, 1, 1, true); hit('fly', flx, fly_y, 12 * U, .7); }
   }
   if (time - (fr.tongue ?? -99) < .2) { ctx.strokeStyle = rgba(tint([230, 110, 120])); ctx.lineWidth = 2.5 * U; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(fxx + 8 * U, fyy - 22 * U); ctx.lineTo(fly.tx, fly.ty); ctx.stroke(); }
 
   /* crane in the shallows, with its reflection */
   const cr = bam.crane;
-  if (time > cr.danceAt + 30) cr.danceAt = time + R() * 10;
+  if (time > cr.danceAt + 60) cr.danceAt = time + R() * 20;
   const dct = time - cr.danceAt, dancing = dct >= 0 && dct < 3.2;
   const flyT = time - (cr.flyAt ?? -99), flying = flyT >= 0 && flyT < 6;
   let cx = cr.x * W, cy = sy0 + sh * .45, crot = 0, csx = 1, csy = 1.25;
@@ -1360,7 +1364,7 @@ function drawBamboo(dt, day, night) {
   // fishing: a quick stab into the stream, a fish in the beak, a gulp
   cr.fishAt ??= time + 8;
   const idle = !dancing && !flying && foldU(cr.fold) === 0;
-  if (idle && time > cr.fishAt + 3) cr.fishAt = time + 10 + R() * 8;
+  if (idle && time > cr.fishAt + 3) cr.fishAt = time + 22 + R() * 14;
   const ft = time - cr.fishAt, fishing = idle && ft >= 0 && ft < 3;
   if (fishing && ft < .5) crot = Math.sin(PI * ft / .5) * .45;
   const cu = foldGlyph('鹤', cx, cy, 90 * U, cr.fold, [craneCol, tint([34, 34, 40]), tint([220, 40, 40])], { rot: crot, sx: csx, sy: csy, style: rgba(craneCol), foldScale: 1.25 });
@@ -1428,7 +1432,7 @@ function drawBamboo(dt, day, night) {
 
   /* falling leaves */
   ctx.fillStyle = rgba(tint(mix(P.leaf, [150, 170, 80], .3)));
-  if (R() < .05) bam.leaves.push(newLeaf(R() * W, -20));
+  if (R() < .012) bam.leaves.push(newLeaf(R() * W, -20));
   for (let i = bam.leaves.length - 1; i >= 0; i--) {
     const l = bam.leaves[i];
     l.life -= dt; l.x += (l.vx + bWind(l.x) * 60 * U) * dt + Math.sin(time * 2 + l.r) * 20 * U * dt; l.y += l.vy * dt; l.r += l.vr * dt;
@@ -1547,24 +1551,24 @@ function makeBerg(x, s, v) {
   return { x, s, v, rows, blocks, ph: R() * TAU };
 }
 const ice = {
-  bergs: [makeBerg(.2, .8, .25), makeBerg(.63, .55, .15), makeBerg(.88, 1.1, .35)],
-  floes: Array.from({ length: 7 }, (_, i) => ({ x: i / 7 + R() * .08, v: .45 + R() * .45, s: 30 + R() * 22, spd: (.004 + R() * .006) * (R() < .5 ? 1 : -1), seal: i === 2 || i === 5 })),
+  bergs: [makeBerg(.2, .8, .25), makeBerg(.86, 1.05, .35)],
+  floes: Array.from({ length: 4 }, (_, i) => ({ x: i / 4 + R() * .08, v: .45 + R() * .45, s: 30 + R() * 22, spd: (.003 + R() * .004) * (R() < .5 ? 1 : -1), seal: i === 1 || i === 3 })),
   bear: { x: .22, dir: 1, pause: 0, rearAt: -99 },
-  penguins: Array.from({ length: 11 }, (_, i) => ({ hx: .72 + (i % 4) * .055 + (R() - .5) * .02, hv: .18 + Math.floor(i / 4) * .12 + R() * .04, ph: R() * TAU, state: 'stand', t: 0, sx: 0, sy: 0 })),
+  penguins: Array.from({ length: 7 }, (_, i) => ({ hx: .73 + (i % 3) * .07 + (R() - .5) * .02, hv: .18 + Math.floor(i / 3) * .14 + R() * .04, ph: R() * TAU, state: 'stand', t: 0, sx: 0, sy: 0 })),
   nextSlide: 4,
-  walruses: [[.04, .1, 1], [.11, .07, .85], [.17, .12, .95]].map(([x, v, s]) => ({ x, v, s, ph: R() * TAU, bellowAt: -99 })),
+  walruses: [[.05, .1, 1], [.14, .08, .9]].map(([x, v, s]) => ({ x, v, s, ph: R() * TAU, bellowAt: -99 })),
   holeSeal: { upAt: 1, down: -99 },
   fox: { x: .35, dir: 1, state: 'trot', t: 0, next: 5 },
   lemming: { upAt: -99, x: 0 },
-  reindeer: Array.from({ length: 7 }, (_, i) => ({ x: .02 + i * .035 + R() * .01, ph: R() * TAU })),
+  reindeer: Array.from({ length: 4 }, (_, i) => ({ x: .02 + i * .045 + R() * .01, ph: R() * TAU })),
   owl: { x: .3, y: .22, dir: 1 },
   terns: [], nextTern: 3,
   orcas: [{ x: .4, t0: 2, per: 11, breachAt: -99 }, { x: .47, t0: 3.2, per: 11, breachAt: -99 }],
   narwhal: { x: .75, t0: 6, per: 15 },
   whale: { x: .55, t0: 1, per: 18 },
-  snow: Array.from({ length: 110 }, () => ({ x: R(), y: R(), s: 8 + R() * 9, ph: R() * TAU, vy: .02 + R() * .03 })),
-  drifts: Array.from({ length: 34 }, () => ({ x: R(), v: R(), s: 14 + R() * 12, r: (R() - .5) * .5 })),
-  starsG: Array.from({ length: 14 }, () => ({ x: R(), y: R() * .8, ph: R() * TAU, s: 10 + R() * 6 })),
+  snow: Array.from({ length: 42 }, () => ({ x: R(), y: R(), s: 8 + R() * 8, ph: R() * TAU, vy: .012 + R() * .018 })),
+  drifts: Array.from({ length: 14 }, () => ({ x: R(), v: R(), s: 14 + R() * 12, r: (R() - .5) * .5 })),
+  starsG: Array.from({ length: 6 }, () => ({ x: R(), y: R() * .8, ph: R() * TAU, s: 10 + R() * 6 })),
   rim: Array.from({ length: 9 }, (_, i) => ({ a: i / 9 * TAU + R() * .3, s: 14 + R() * 8 })),
   parts: [], cracks: [],
   gust: { on: false, x: 0, dir: 1, next: 9 },
@@ -1643,8 +1647,8 @@ function drawIce(dt, day, night) {
     ctx.save(); ctx.globalCompositeOperation = 'lighter';
     const cols = [[80, 255, 170], [150, 110, 255], [90, 220, 255]];
     const inSky = my > -999 && my < IHOR;
-    for (let r = 0; r < 3; r++) {
-      const n = Math.ceil(W / (30 * U));
+    for (let r = 0; r < 2; r++) {
+      const n = Math.ceil(W / (38 * U));
       for (let i = 0; i <= n; i++) {
         const x = i / n * W;
         let y = IHOR * (.18 + r * .12) + Math.sin(x * .005 + time * .35 + r * 2) * 36 * U + Math.sin(x * .013 - time * .5 + r) * 14 * U;
@@ -1667,7 +1671,7 @@ function drawIce(dt, day, night) {
   ctx.fillStyle = mg;
   ctx.beginPath(); ctx.moveTo(0, baseY); for (let x = 0; x <= W + 16; x += 16) ctx.lineTo(x, ridge(x)); ctx.lineTo(W, baseY); ctx.closePath(); ctx.fill();
   ctx.fillStyle = rgba(mix(P.mount, P.ink, .35), .7);
-  const step = 20 * U;
+  const step = 30 * U;
   for (let x = step / 2; x < W; x += step) { glyph('山', x, ridge(x) + step * .5, step, 0, 1, .8); hit('icepeaks', x, ridge(x) + step * .1, step * .5, 1.4); }
   ctx.fillStyle = rgba(tint([130, 96, 70]));
   for (const d of ice.reindeer) {
@@ -1686,7 +1690,7 @@ function drawIce(dt, day, night) {
   glyph('鸮', ox, oy, 34 * U, Math.sin(time * .8) * .06, 1, .6 + .4 * oflap, true);
   hit('owl', ox, oy, 22 * U, .7);
   ice.nextTern -= dt;
-  if (ice.nextTern < 0) { const dir = R() < .5 ? 1 : -1; ice.terns.push({ x: dir > 0 ? -50 : W + 50, y: IHOR * (.35 + R() * .45), vx: dir * (70 + R() * 30) * U, m: Array.from({ length: 5 + (R() * 4 | 0) }, (_, i) => ({ ox: -Math.ceil(i / 2) * 24 * dir, oy: Math.ceil(i / 2) * 11 * (i % 2 ? 1 : -1), ph: R() * TAU })) }); ice.nextTern = 9 + R() * 8; }
+  if (ice.nextTern < 0) { const dir = R() < .5 ? 1 : -1; ice.terns.push({ x: dir > 0 ? -50 : W + 50, y: IHOR * (.35 + R() * .45), vx: dir * (70 + R() * 30) * U, m: Array.from({ length: 5 + (R() * 4 | 0) }, (_, i) => ({ ox: -Math.ceil(i / 2) * 24 * dir, oy: Math.ceil(i / 2) * 11 * (i % 2 ? 1 : -1), ph: R() * TAU })) }); ice.nextTern = 25 + R() * 15; }
   ctx.fillStyle = rgba(tint([246, 248, 252]));
   ice.terns = ice.terns.filter(f => {
     f.x += f.vx * dt; let alive = false;
@@ -1798,7 +1802,7 @@ function drawIce(dt, day, night) {
     if (time > act.until && !reduce) {
       const nx = { lounge: 'dive', dive: 'forage', forage: 'haul', haul: 'lounge' }[act.state];
       act.state = nx; act.t = time;
-      act.until = time + { dive: 1.5, forage: 12, haul: 1.7, lounge: 35 + R() * 35 }[nx];
+      act.until = time + { dive: 1.5, forage: 12, haul: 1.7, lounge: 60 + R() * 40 }[nx];
       if (nx === 'forage') splash(w.x * W, SHELF, 7);
     }
     const s = 78 * U * w.s * shelfS(w.v);
@@ -1848,7 +1852,7 @@ function drawIce(dt, day, night) {
   // penguin colony: waddling about, sliding off to fish, and one parent raising a chick
   const parent = ice.penguins[5];
   ice.nextSlide -= dt;
-  if (ice.nextSlide < 0) { const idle = ice.penguins.filter(p => p.state === 'stand' && p !== parent && foldU(p.fold) === 0); if (idle.length) startSlide(idle[R() * idle.length | 0]); ice.nextSlide = 5 + R() * 6; }
+  if (ice.nextSlide < 0) { const idle = ice.penguins.filter(p => p.state === 'stand' && p !== parent && foldU(p.fold) === 0); if (idle.length) startSlide(idle[R() * idle.length | 0]); ice.nextSlide = 14 + R() * 10; }
   const pgGrad = vGrad([[0, tint([24, 26, 34])], [.42, tint([24, 26, 34])], [.46, tint([250, 250, 246])], [.84, tint([250, 250, 246])], [.88, tint([240, 150, 50])], [1, tint([240, 150, 50])]]);
   const nest = ice.nest || (ice.nest = { t0: time - 2 });
   const ct = ((time - nest.t0) % 110 + 110) % 110;
@@ -1865,7 +1869,7 @@ function drawIce(dt, day, night) {
       const u = clamp((time - p.t) / 3, 0, 1);
       x = lerp(p.fromX, p.hx, u) * W; v = lerp(p.fromV, p.hv, u); y = shelfY(v); sc = shelfS(v);
       rot = Math.sin(time * 9 + p.ph) * .14; bob = -Math.abs(Math.sin(time * 9 + p.ph)) * 3 * U;
-      if (u >= 1) { p.state = 'stand'; p.wanderAt = time + 6 + R() * 16; }
+      if (u >= 1) { p.state = 'stand'; p.wanderAt = time + 14 + R() * 20; }
     } else if (p.state === 'slide') {
       const u = clamp(st / 1.6, 0, 1);
       x = lerp(p.fromX, p.toX, u) * W; y = lerp(shelfY(p.fromV), SHELF + 4 * U, u); rot = -PI / 2;
@@ -1931,7 +1935,7 @@ function drawIce(dt, day, night) {
       if (Math.abs(tx - b.x) < .01) { hk.state = 'wait'; hk.until = time + 7; b.dir = 1; }
     } else if (hk.state === 'wait') { if (time > hk.until) { hk.state = 'lunge'; hk.t = time; } }
     else if (hk.state === 'lunge') { b.x += .09 * dt; if (time - hk.t > .5) { hk.state = 'miss'; hk.t = time; ice.holeSeal.down = time; splash(hx, hy, 8); } }
-    else if (hk.state === 'miss') { if (time - hk.t > 2.5) { hk.state = 'patrol'; hk.at = time + 40 + R() * 25; b.dir = -1; } }
+    else if (hk.state === 'miss') { if (time - hk.t > 2.5) { hk.state = 'patrol'; hk.at = time + 70 + R() * 40; b.dir = -1; } }
   }
   const walking = !rearing && ((hk.state === 'patrol' && b.pause <= 0) || hk.state === 'approach');
   const bearGrad = vGrad([[0, tint([252, 248, 236])], [1, tint([214, 206, 188])]]);
@@ -1983,7 +1987,7 @@ function drawIce(dt, day, night) {
   /* wind and snowfall */
   const g = ice.gust;
   if (!reduce) { g.next -= dt; if (!g.on && g.next < 0) { g.on = true; g.dir = R() < .5 ? 1 : -1; g.x = g.dir > 0 ? -200 : W + 200; } }
-  if (g.on) { g.x += g.dir * W * .3 * dt; if (g.x > W + 260 || g.x < -260) { g.on = false; g.next = 14 + R() * 10; } }
+  if (g.on) { g.x += g.dir * W * .3 * dt; if (g.x > W + 260 || g.x < -260) { g.on = false; g.next = 35 + R() * 20; } }
   const windX = x => .15 * Math.sin(time * .3) + (g.on ? g.dir * 1.4 * Math.exp(-Math.pow((x - g.x) / (W * .18), 2)) : 0);
   ctx.fillStyle = rgba(WHITE, .85);
   for (const s of ice.snow) {
@@ -2069,8 +2073,8 @@ function frame(dt) {
     ctx.fillStyle = g; ctx.fillRect(x - sz * 3.4, y - sz * 3.4, sz * 6.8, sz * 6.8);
     if (rays) {
       ctx.fillStyle = rgba(col, 0.32);
-      for (let i = 0; i < 12; i++) {
-        const a = i / 12 * TAU + time * 0.06;
+      for (let i = 0; i < 8; i++) {
+        const a = i / 8 * TAU + time * 0.04;
         const rr = sz * (1.05 + 0.06 * Math.sin(time * 1.5 + i));
         glyph('光', x + Math.cos(a) * rr, y + Math.sin(a) * rr, sz * 0.22, a + PI / 2, 1, 1, true);
       }
@@ -2124,7 +2128,7 @@ function frame(dt) {
 
   /* flocks (in the sky, above hills) */
   nextFlock -= dt;
-  if (nextFlock < 0 && night < 0.6) { spawnFlock(0, 0, false); nextFlock = 9 + R() * 10; }
+  if (nextFlock < 0 && night < 0.6) { spawnFlock(0, 0, false); nextFlock = 22 + R() * 18; }
   ctx.fillStyle = rgba(mix(P.ink, P.skyTop, 0.15), 0.9);
   flocks = flocks.filter(f => {
     f.age += dt;
@@ -2153,7 +2157,7 @@ function frame(dt) {
   if (!reduce) {
     gust.next -= dt;
     if (!gust.on && gust.next < 0) { gust.on = true; gust.x = -200; }
-    if (gust.on) { gust.x += W * 0.2 * dt; if (gust.x > W + 200) { gust.on = false; gust.next = 12 + R() * 8; } }
+    if (gust.on) { gust.x += W * 0.2 * dt; if (gust.x > W + 200) { gust.on = false; gust.next = 28 + R() * 16; } }
   }
   const windAt = x => 0.18 * Math.sin(time * 0.5 + x * 0.004) + (gust.on ? 0.9 * Math.exp(-Math.pow((x - gust.x) / (W * 0.12), 2)) : 0);
 
@@ -2371,7 +2375,7 @@ function drawAnimal(a, P, lit, night, dt, zp, gp) {
     if (a.kind === 'elephant' && R() < dt * 1.2) for (let k = 0; k < 5; k++) roars.push({ ch: '水', x: x + a.dir * sz * .38, y: y - sz * .55, vx: -a.dir * (30 + R() * 60) * U, vy: -(100 + R() * 60) * U, g: 190 * U, life: 1.3, max: 1.3, s: 12 * U, grow: 4 * U, col: [210, 235, 255], a: .85 }); }
   if (a.kind === 'lion') {
     // A day in the life: rest, stalk the gazelles, sprint, give up, walk home.
-    const h = a.hunt || (a.hunt = { state: 'rest', until: time + 22 + R() * 10, home: a.x, g0: a.g });
+    const h = a.hunt || (a.hunt = { state: 'rest', until: time + 50 + R() * 20, home: a.x, g0: a.g });
     const prey = animals.filter(b => b.kind === 'gazelle');
     const tgt = prey.reduce((m, b) => Math.abs(b.x - a.x) < Math.abs(m.x - a.x) ? b : m, prey[0]);
     if (h.state === 'rest' && time > h.until && !(a.roaring > 0) && !reduce) { h.state = 'stalk'; h.until = time + 7; }
@@ -2381,7 +2385,7 @@ function drawAnimal(a, P, lit, night, dt, zp, gp) {
     } else if (h.state === 'chase') { a.x += a.dir * .07 * dt; if (time > h.until) h.state = 'return'; }
     else if (h.state === 'return') {
       a.dir = Math.sign(h.home - a.x) || 1; a.x += a.dir * .02 * dt; a.g += (h.g0 - a.g) * dt * .4;
-      if (Math.abs(a.x - h.home) < .01) { h.state = 'rest'; h.until = time + 35 + R() * 20; a.g = h.g0; }
+      if (Math.abs(a.x - h.home) < .01) { h.state = 'rest'; h.until = time + 75 + R() * 35; a.g = h.g0; }
     }
     if (h.state === 'rest') {
       bob = 0; rot = 0;
